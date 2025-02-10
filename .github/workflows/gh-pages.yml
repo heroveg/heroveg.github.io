@@ -1,0 +1,30 @@
+name: Deploy Hugo site to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Cambia a 'master' si usas esa rama
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: true  # Importante si usas temas como submodules
+
+      - name: Set up Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: 'latest'  # Usa la última versión de Hugo
+
+      - name: Build site
+        run: hugo --minify  # Genera los archivos estáticos
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # Token automático proporcionado por GitHub
+          publish_dir: ./public  # Carpeta donde Hugo genera los archivos estáticos
